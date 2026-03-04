@@ -69,12 +69,12 @@ def answer_question(question: str, session_id: str) -> str:
     # Access the live run tree to add dynamic metadata mid-execution
     run_tree = get_current_run_tree()
     if run_tree:
-        run_tree.metadata = {
+        run_tree.add_metadata({
             "session_id": session_id,
             "user_tier": "free",
             "app_version": "2.1.0",
             "environment": "demo",
-        }
+        })
         run_tree.tags = ["qa", "demo-03"]
 
     response = openai_client.chat.completions.create(
@@ -212,11 +212,11 @@ def run_experiment(prompt: str, temperature: float, max_tokens: int) -> str:
     """Run a prompt with specific hyperparameters — tagged for comparison."""
     run_tree = get_current_run_tree()
     if run_tree:
-        run_tree.metadata = {
+        run_tree.add_metadata({
             "temperature": temperature,
             "max_tokens": max_tokens,
             "experiment_batch": "batch-001",
-        }
+        })
 
     response = openai_client.chat.completions.create(
         model=MODEL,
