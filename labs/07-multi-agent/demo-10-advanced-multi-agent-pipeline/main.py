@@ -165,6 +165,11 @@ def planner_node(state: PipelineState) -> dict:
             f"Research current state and applications of {topic}",
             f"Research future outlook and challenges of {topic}",
         ])[:3]
+        # Normalize: LLM sometimes returns dicts like [{"task1": "..."}, ...] instead of strings
+        tasks = [
+            next(iter(t.values())) if isinstance(t, dict) else str(t)
+            for t in tasks
+        ]
     except json.JSONDecodeError:
         outline = response.content
         tasks   = [
